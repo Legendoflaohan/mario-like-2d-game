@@ -4,7 +4,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 
-class Cube {
+class Player {
     constructor(anchorPoint, velocity, acc) {
         this.anchorPoint = anchorPoint;
         this.width = 100;
@@ -35,26 +35,24 @@ class Cube {
 
     move() {
         this.anchorPoint.x += this.velocity.h;
-        cube.velocity.h = 0;
+        //Without this line, the player won't stop after pressing the direction keys.
+        player.velocity.h = 0;
         if (keys.ArrowRight.pressed) {
-            cube.velocity.h = 10;
+            player.velocity.h = 15;
         }
         if (keys.ArrowLeft.pressed) {
-            cube.velocity.h = -10;
+            player.velocity.h = -15;
         }
     }
-
-
 
     // 封装。
     execution() {
-        cube.initialize();
+        player.initialize();
         // Make jump before gravity set this.anchorPoint.y to fix number.
-        cube.jump();
-        cube.move();
-        cube.gravity();
+        player.jump();
+        player.move();
+        player.gravity();
     }
-
 }
 
 const keys = {
@@ -66,12 +64,12 @@ const keys = {
     },
 }
 
-const cube = new Cube({ x: 450, y: 0, }, { h: 0, v: 0 }, 9.8);
+const player = new Player({ x: 450, y: 0, }, { h: 0, v: 0 }, 9.8);
 
 function animation() {
     c.fillStyle = 'wheat';
     c.fillRect(0, 0, canvas.width, canvas.height);
-    cube.execution();
+    player.execution();
     window.requestAnimationFrame(animation);
 }
 
@@ -86,7 +84,7 @@ window.addEventListener('keydown', (e) => {
             keys.ArrowLeft.pressed = true;
             break;
         case 'ArrowUp': 
-            cube.velocity.v = -25;
+            player.velocity.v = -25;
             break;
     }
 });
