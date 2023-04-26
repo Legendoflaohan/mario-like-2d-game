@@ -13,29 +13,21 @@ class Cube {
         this.velocity = velocity;
         this.acc = acc;
     }
-    //Actions of the class, actions can use the constructor properties above
-    //Action one: generate a blue cube.
+
     initialize() {
         c.fillStyle = 'grey';
         c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
     }
 
     gravity() {
-        // Read this if statement after the rest part of this function.
-        // Adjust the 误差
         if (this.anchorPoint.y + this.height >= canvas.height) {
             this.velocity.v = 0;
-            // Fix the 误差
             this.anchorPoint.y = canvas.height - this.height;
-            // Stop the cube.
             this.acc = 0;
         }
-        //move the blue cube.
         this.anchorPoint.y += this.velocity.v;
-        //acceleration
         this.velocity.v += this.acc;
     }
-
     jump() {
         this.anchorPoint.y += this.velocity.v;
         this.acc = 2.5;
@@ -43,41 +35,69 @@ class Cube {
 
     move() {
         this.anchorPoint.x += this.velocity.h;
+        cube.velocity.h = 0;
+        if (keys.ArrowRight.pressed) {
+            cube.velocity.h = 10;
+        }
+        if (keys.ArrowLeft.pressed) {
+            cube.velocity.h = -10;
+        }
     }
-}
-// Set a cube with class Cube. Set it's anchorPoint, speed, and acc.
-const cube = new Cube({ x: 100, y: 0, }, { h: 0, v: 0 }, 9.8);
-const cube1 = new Cube({ x: 600, y: 0, }, { h: 0, v: 0 }, 6);
 
-// Animation loop function.
-function hangHang() {
-    // A per fpx refresh purple background for the blue cubes.
+
+
+    // 封装。
+    execution() {
+        cube.initialize();
+        // Make jump before gravity set this.anchorPoint.y to fix number.
+        cube.jump();
+        cube.move();
+        cube.gravity();
+    }
+
+}
+
+const keys = {
+    ArrowRight: {
+        pressed: false
+    },
+    ArrowLeft: {
+        pressed: false
+    },
+}
+
+const cube = new Cube({ x: 450, y: 0, }, { h: 0, v: 0 }, 9.8);
+
+function animation() {
     c.fillStyle = 'wheat';
     c.fillRect(0, 0, canvas.width, canvas.height);
-    // cube who just born will execute initialize function in class Cube, each fps it move 1px downwards.
-    cube.initialize();
-    // cube who just born will execute move function in class Cube, for each fps it executes one time.
-    cube.jump();
-    cube.gravity();
-    // Let's jump.
-    cube1.initialize();
-    cube1.gravity();
-    cube.move();
-    cube1.move();
-    window.requestAnimationFrame(hangHang);
+    cube.execution();
+    window.requestAnimationFrame(animation);
 }
 
-hangHang();
+animation();
+
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowRight':
-            cube.velocity.h = 3;
+            keys.ArrowRight.pressed = true;
             break;
         case 'ArrowLeft':
-            cube.velocity.h = -3;
+            keys.ArrowLeft.pressed = true;
             break;
-        case 'ArrowUp':
+        case 'ArrowUp': 
             cube.velocity.v = -25;
+            break;
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    switch (e.key) {
+        case 'ArrowRight':
+            keys.ArrowRight.pressed = false;
+            break;
+        case 'ArrowLeft':
+            keys.ArrowLeft.pressed = false;
             break;
     }
 });
