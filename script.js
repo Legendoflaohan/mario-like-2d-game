@@ -14,7 +14,7 @@ class Player {
         this.acc = acc;
     }
 
-    initialize() {
+    avatar() {
         c.fillStyle = 'red';
         c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
 
@@ -50,7 +50,7 @@ class Player {
 
     // 封装。
     execute() {
-        this.initialize();
+        this.avatar();
         // Make jump before gravity set this.anchorPoint.y to fix number.
         this.jump();
         this.move();
