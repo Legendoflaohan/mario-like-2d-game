@@ -22,7 +22,6 @@ class Cube {
         this.anchorPoint.y += this.velocity.v;
         if (this.anchorPoint.y + this.height + this.velocity.v < canvas.height) {
             this.velocity.v += this.acc;
-            console.log('fucker')
         } else {
             this.velocity.v = 0;
         }
