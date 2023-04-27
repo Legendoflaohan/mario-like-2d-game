@@ -7,11 +7,56 @@ const c = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 
+// After using c.scale(4, 4), the viewport's width and height.
 const scaledCanvas = {
     width: canvas.width / 4,
-    height: canvas.height /4,
+    height: canvas.height / 4,
 }
 
+// This section is about drawing collision blocks on the background.
+// This contains the floor blocks with the locations.
+const collisionBlocks = [];
+// This contains the floor tiles' arrays.
+// it's called a 2d array which is an array of arrays, rows and columns.
+const floorCollision2D = [];
+for (let i = 0; i < floorCollisions.length; i += 36) {
+    floorCollision2D.push(floorCollisions.slice(i, i + 36));
+}
+// x and y work as index cuz forEach syntax.
+floorCollision2D.forEach((row, y) => {
+    row.forEach((symbol, x) => {
+        if (symbol === 202) {
+            collisionBlocks.push(new CollisionBlock({
+                anchorPoint: {
+                    x: x * 16,
+                    y: y * 16,
+                }
+            }))
+        }
+    })
+})
+// This contains the platform blocks with locations.
+const platformCollsionBlocks = [];
+// This contains the platform tiles' arrays.
+const platformCollision2D = [];
+for (let i = 0; i < platformCollisions.length; i += 36) {
+    platformCollision2D.push(platformCollisions.slice(i, i + 36));
+}
+// x and y work as index cuz forEach syntax.
+platformCollision2D.forEach((row, y) => {
+    row.forEach((symbol, x) => {
+        if (symbol === 202) {
+            platformCollsionBlocks.push(new CollisionBlock({
+                anchorPoint: {
+                    x: x * 16,
+                    y: y * 16,
+                }
+            }))
+        }
+    })
+})
+
+// When keys are not being pushed.
 const keys = {
     ArrowRight: {
         pressed: false
@@ -26,7 +71,7 @@ const keys = {
 const player = new Player({ x: 450, y: 0, }, { h: 0, v: 0 }, 9.8);
 
 // Introduce the background.
-const background = new Sprite ({
+const background = new Sprite({
     anchorPoint: {
         x: 0,
         y: 0,
@@ -47,20 +92,29 @@ function animation() {
     // but the stuff actually doesn't change. So when we move origin(coordinate) around using translate method,
     // we are using the actual length.
     c.scale(4, 4);
-    // The x, y of the drawImage as well as the fillRect are all relate to the origin,
-    // when the origin aka the coordinate changed, the position of stuff drawed after the change will change,
-    // stuff before the coordinate change will rimain its position.
-    // The canvas aka the viewport won't change place.
+    // // The x, y of the drawImage as well as the fillRect are all relate to the origin,
+    // // when the origin aka the coordinate changed, the position of stuff drawed after the change will change,
+    // // stuff before the coordinate change will rimain its position.
+    // // The canvas aka the viewport won't change place.
     c.translate(0, -background.image.height);
     c.translate(0, scaledCanvas.height);
     background.execute();
+    // Draw collisions.
+    collisionBlocks.forEach((collisionBlock) => {
+        collisionBlock.execute();
+    })
+    platformCollsionBlocks.forEach((platfromcollisionBlock) => {
+        platfromcollisionBlock.execute();
+    })
     c.restore();
     player.execute();
     window.requestAnimationFrame(animation);
 }
 
 animation();
-
+console.log(collisionBlocks);
+console.log(platformCollsionBlocks)
+// When key down, set value to true.
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowRight':
@@ -75,6 +129,7 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+// When key up, set value to false.
 window.addEventListener('keyup', (e) => {
     switch (e.key) {
         case 'ArrowRight':

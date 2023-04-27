@@ -11,7 +11,7 @@ class Sprite {
         this.image.src = imageSrc;
     }
     // Introduce a way to draw image on the canvas.
-    paint() {
+    draw() {
         // Read the rest before read this line.
         // This line of code provides errors, if this.image doesn't exists, return.
         if (!this.image) {return;}
@@ -20,7 +20,7 @@ class Sprite {
     }
 
     execute() {
-        this.paint();
+        this.draw();
     }
 
 }
