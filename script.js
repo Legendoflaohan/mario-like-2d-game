@@ -1,5 +1,16 @@
 // VS Code trick: Ctrl + K Ctrl + 0 fold all.
 // VS Code trick: Ctrl + K Ctrl + J unfolds all.
+// VS Code trick: Ctrl + Space a new line regardless the cursor position.
+// VS Code trick: Ctrl + Shift + Space a new line above.
+// VS Code trick: Ctrl + L select the whole line.
+// VS Code trick: Ctrl + D select the current word.
+// VS Code trick: Ctrl + U unselect the current word.
+// VS Code trick: Ctrl + K Ctrl + D skip this current word.
+// VS Code trick: Ctrl + K Ctrl + D skip this current word.
+// VS Code trick: Ctrl Shift + L select all matches.
+
+
+
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -68,7 +79,18 @@ const keys = {
 
 // Introduce a player.
 // It's called a new instance.
-const player = new Player({ x: 450, y: 0, }, { h: 0, v: 0 }, 9.8);
+const player = new Player({
+    anchorPoint: {
+        x: 125,
+        y: 0,
+    },
+    velocity: {
+        h: 0,
+        v: 0,
+    },
+    acc: 2.5,
+    collisionBlocks, //It's a short version for collisionBlocks: collisionBlocks.
+});
 
 // Introduce the background.
 const background = new Sprite({
@@ -106,14 +128,12 @@ function animation() {
     platformCollsionBlocks.forEach((platfromcollisionBlock) => {
         platfromcollisionBlock.execute();
     })
-    c.restore();
     player.execute();
+    c.restore();
     window.requestAnimationFrame(animation);
 }
 
 animation();
-console.log(collisionBlocks);
-console.log(platformCollsionBlocks)
 // When key down, set value to true.
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
@@ -124,7 +144,7 @@ window.addEventListener('keydown', (e) => {
             keys.ArrowLeft.pressed = true;
             break;
         case 'ArrowUp':
-            player.velocity.v = -25;
+            player.velocity.v = -15;
             break;
     }
 });

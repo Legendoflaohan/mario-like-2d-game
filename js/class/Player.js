@@ -1,11 +1,12 @@
 class Player {
-    constructor(anchorPoint, velocity, acc) {
+    constructor({ anchorPoint, velocity, acc, collisionBlocks }) {
         this.anchorPoint = anchorPoint;
-        this.width = 100;
-        this.height = 100;
+        this.width = 100 / 4;
+        this.height = 100 / 4;
         //set initial speed and acc.
         this.velocity = velocity;
         this.acc = acc;
+        this.collisionBlocks = collisionBlocks;
     }
 
     draw() {
@@ -17,28 +18,62 @@ class Player {
     }
 
     gravity() {
-        if (this.anchorPoint.y + this.height >= canvas.height) {
-            this.velocity.v = 0;
-            this.anchorPoint.y = canvas.height - this.height;
-            this.acc = 0;
-        }
         this.anchorPoint.y += this.velocity.v;
         this.velocity.v += this.acc;
     }
-    jump() {
-        this.anchorPoint.y += this.velocity.v;
-        this.acc = 2.5;
-    }
+
 
     move() {
         this.anchorPoint.x += this.velocity.h;
         //Without this line, the player won't stop after pressing the direction keys.
-        player.velocity.h = 0;
+        this.velocity.h = 0;
         if (keys.ArrowRight.pressed) {
-            player.velocity.h = 15;
+            this.velocity.h = 5;
         }
         if (keys.ArrowLeft.pressed) {
-            player.velocity.h = -15;
+            this.velocity.h = -5;
+        }
+    }
+    checkForHorizontalCollisions() {
+        for (let i = 0; i < this.collisionBlocks.length; i++) {
+            const collisionBlock = this.collisionBlocks[i];
+            if (collision({
+                object1: this,
+                object2: collisionBlock,
+            })) {
+                if (this.velocity.h > 0) {
+                    this.velocity.h = 0;
+                    this.anchorPoint.x = collisionBlock.anchorPoint.x - this.width - 0.01;
+                    break;
+                }
+                if (this.velocity.h < 0) {
+                    this.velocity.h = 0;
+                    this.anchorPoint.x = collisionBlock.anchorPoint.x + collisionBlock.width + 0.01;
+                    break;
+                }
+            }
+        }
+    }
+
+    // This detect whether the player is about to go cross the block.
+    checkForVerticalCollisions() {
+        for (let i = 0; i < this.collisionBlocks.length; i++) {
+            const collisionBlock = this.collisionBlocks[i];
+            if (collision({
+                object1: this,
+                object2: collisionBlock,
+            })) {
+                if (this.velocity.v > 0) {
+                    this.velocity.v = 0;
+                    this.anchorPoint.y = collisionBlock.anchorPoint.y - this.height - 0.01;
+                    break;
+                }
+                if (this.velocity.v < 0) {
+                    this.velocity.v = 0;
+                    this.anchorPoint.y = collisionBlock.anchorPoint.y + collisionBlock.height + 0.01;
+                    break;
+                }
+            }
         }
     }
 
@@ -46,8 +81,9 @@ class Player {
     execute() {
         this.draw();
         // Make jump before gravity set this.anchorPoint.y to fix number.
-        this.jump();
         this.move();
+        this.checkForHorizontalCollisions();
         this.gravity();
+        this.checkForVerticalCollisions();
     }
 }
