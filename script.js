@@ -90,6 +90,8 @@ const player = new Player({
     },
     acc: 2,
     collisionBlocks, //It's a short version for collisionBlocks: collisionBlocks.
+    imageSrc: './img/player-avatar/Idle.png',
+    frameRate: 8,
 });
 
 // Introduce the background.
@@ -102,8 +104,6 @@ const background = new Sprite({
 })
 
 function animation() {
-    c.fillStyle = 'wheat';
-    c.fillRect(0, 0, canvas.width, canvas.height);
     // Read next line of code then go back here.
     // Here's the solution, use canvas save and restore to create an box,
     // only stuff inside the box will be affected by scale method~~~

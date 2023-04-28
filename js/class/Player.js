@@ -1,5 +1,6 @@
-class Player {
-    constructor({ anchorPoint, velocity, acc, collisionBlocks }) {
+class Player extends Sprite {
+    constructor({ anchorPoint, velocity, acc, collisionBlocks, imageSrc, frameRate }) {
+        super({ imageSrc, frameRate });
         this.anchorPoint = anchorPoint;
         this.width = 100 / 4;
         this.height = 100 / 4;
@@ -7,14 +8,6 @@ class Player {
         this.velocity = velocity;
         this.acc = acc;
         this.collisionBlocks = collisionBlocks;
-    }
-
-    draw() {
-        c.fillStyle = 'red';
-        c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
-
-        c.fillStyle = 'brown';
-        c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height / 2);
     }
 
     gravity() {
@@ -79,6 +72,8 @@ class Player {
 
     // 封装。
     execute() {
+        c.fillStyle = 'rgba(0, 255, 0, 0.2)';
+        c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
         this.draw();
         // Make jump before gravity set this.anchorPoint.y to fix number.
         this.move();
