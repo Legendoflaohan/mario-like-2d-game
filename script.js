@@ -88,7 +88,7 @@ const player = new Player({
         h: 0,
         v: 0,
     },
-    acc: 2.5,
+    acc: 2,
     collisionBlocks, //It's a short version for collisionBlocks: collisionBlocks.
 });
 
