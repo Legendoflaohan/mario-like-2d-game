@@ -2,7 +2,7 @@ class Sprite {
     // Use {} for the argument of constructor is to benefit form the key: value form,
     // for it can illustrate the name of the argument we are manipulating, provides solid readability.
     // Down to the code which const background to check it out.
-    constructor({ anchorPoint, imageSrc, frameRate = 1 }) {
+    constructor({ anchorPoint, imageSrc, frameRate = 1, frameBuffer }) {
         // Just like the Player class.
         this.anchorPoint = anchorPoint;
         // Create a instance of Image() class, then this.image can use the stuff inside the built-in class: Image().
@@ -16,6 +16,8 @@ class Sprite {
         }
         this.frameRate = frameRate;
         this.currentFrame = 0;
+        this.frameBuffer = frameBuffer;
+        this.elapsedFrame = 0;
     }
     // Introduce a way to draw image on the canvas.
     draw() {
@@ -46,12 +48,14 @@ class Sprite {
     }
 
     updateFrames() {
-        console.log(this.frameRate)
-        if (this.currentFrame < this.frameRate - 1) {
-            this.currentFrame++;
-        } else {
-            this.currentFrame = 0;
+        if (this.elapsedFrame % this.frameBuffer === 0) {
+            if (this.currentFrame < this.frameRate - 1) {
+                this.currentFrame++;
+            } else {
+                this.currentFrame = 0;
+            }
         }
+        this.elapsedFrame++;
     }
 
     execute() {

@@ -1,6 +1,6 @@
 class Player extends Sprite {
-    constructor({ anchorPoint, velocity, acc, collisionBlocks, imageSrc, frameRate }) {
-        super({ imageSrc, frameRate });
+    constructor({ anchorPoint, velocity, acc, collisionBlocks, imageSrc, frameRate, frameBuffer }) {
+        super({ imageSrc, frameRate, frameBuffer });
         this.anchorPoint = anchorPoint;
         this.width = 100 / 4;
         this.height = 100 / 4;

@@ -92,6 +92,7 @@ const player = new Player({
     collisionBlocks, //It's a short version for collisionBlocks: collisionBlocks.
     imageSrc: './img/player-avatar/Idle.png',
     frameRate: 8,
+    frameBuffer: 3,
 });
 
 // Introduce the background.
