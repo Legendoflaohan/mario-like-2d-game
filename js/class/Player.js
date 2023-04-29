@@ -1,6 +1,6 @@
 class Player extends Sprite {
-    constructor({ anchorPoint, velocity, acc, collisionBlocks, imageSrc, frameRate, frameBuffer }) {
-        super({ imageSrc, frameRate, frameBuffer });
+    constructor({ anchorPoint, velocity, acc, collisionBlocks, imageSrc, frameRate, frameBuffer, scale = 0.5 }) {
+        super({ imageSrc, frameRate, frameBuffer, scale });
         this.anchorPoint = anchorPoint;
         this.width = 100 / 4;
         this.height = 100 / 4;
@@ -8,6 +8,17 @@ class Player extends Sprite {
         this.velocity = velocity;
         this.acc = acc;
         this.collisionBlocks = collisionBlocks;
+    }
+
+    updateHitbox() {
+        this.hitbox = {
+            anchorPoint: {
+                x: this.anchorPoint.x + 33,
+                y: this.anchorPoint.y + 25,
+            },
+            width: 15,
+            height: 28,
+        }
     }
 
     gravity() {
@@ -31,17 +42,23 @@ class Player extends Sprite {
         for (let i = 0; i < this.collisionBlocks.length; i++) {
             const collisionBlock = this.collisionBlocks[i];
             if (collision({
-                object1: this,
+                object1: this.hitbox,
                 object2: collisionBlock,
             })) {
                 if (this.velocity.h > 0) {
                     this.velocity.h = 0;
-                    this.anchorPoint.x = collisionBlock.anchorPoint.x - this.width - 0.01;
+
+                    const offset = this.hitbox.anchorPoint.x - this.anchorPoint.x + this.hitbox.width;
+
+                    this.anchorPoint.x = collisionBlock.anchorPoint.x - offset - 0.01;
                     break;
                 }
                 if (this.velocity.h < 0) {
                     this.velocity.h = 0;
-                    this.anchorPoint.x = collisionBlock.anchorPoint.x + collisionBlock.width + 0.01;
+
+                    const offset = this.hitbox.anchorPoint.x - this.anchorPoint.x;
+
+                    this.anchorPoint.x = collisionBlock.anchorPoint.x + collisionBlock.width - offset + 0.01;
                     break;
                 }
             }
@@ -53,17 +70,23 @@ class Player extends Sprite {
         for (let i = 0; i < this.collisionBlocks.length; i++) {
             const collisionBlock = this.collisionBlocks[i];
             if (collision({
-                object1: this,
+                object1: this.hitbox,
                 object2: collisionBlock,
             })) {
                 if (this.velocity.v > 0) {
                     this.velocity.v = 0;
-                    this.anchorPoint.y = collisionBlock.anchorPoint.y - this.height - 0.01;
+
+                    const offset = this.hitbox.anchorPoint.y - this.anchorPoint.y + this.hitbox.height;
+
+                    this.anchorPoint.y = collisionBlock.anchorPoint.y - offset - 0.01;
                     break;
                 }
                 if (this.velocity.v < 0) {
                     this.velocity.v = 0;
-                    this.anchorPoint.y = collisionBlock.anchorPoint.y + collisionBlock.height + 0.01;
+
+                    const offset = this.hitbox.anchorPoint.y - this.anchorPoint.y;
+
+                    this.anchorPoint.y = collisionBlock.height - offset + 0.01;
                     break;
                 }
             }
@@ -72,14 +95,19 @@ class Player extends Sprite {
 
     // 封装。
     execute() {
+        this.updateHitbox();
+        this.updateFrames();
         c.fillStyle = 'rgba(0, 255, 0, 0.2)';
         c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
+        c.fillStyle = 'rgba(0, 0, 255, 0.5)';
+        c.fillRect(this.hitbox.anchorPoint.x, this.hitbox.anchorPoint.y, this.hitbox.width, this.hitbox.height);
         this.draw();
-        this.updateFrames();
         // Make jump before gravity set this.anchorPoint.y to fix number.
         this.move();
+        this.updateHitbox();
         this.checkForHorizontalCollisions();
         this.gravity();
+        this.updateHitbox();
         this.checkForVerticalCollisions();
     }
 }

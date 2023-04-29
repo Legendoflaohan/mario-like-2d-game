@@ -2,7 +2,7 @@ class Sprite {
     // Use {} for the argument of constructor is to benefit form the key: value form,
     // for it can illustrate the name of the argument we are manipulating, provides solid readability.
     // Down to the code which const background to check it out.
-    constructor({ anchorPoint, imageSrc, frameRate = 1, frameBuffer }) {
+    constructor({ anchorPoint, imageSrc, frameRate = 1, frameBuffer, scale = 1 }) {
         // Just like the Player class.
         this.anchorPoint = anchorPoint;
         // Create a instance of Image() class, then this.image can use the stuff inside the built-in class: Image().
@@ -11,13 +11,16 @@ class Sprite {
         this.image.src = imageSrc;
         // Get the original size of the image.
         this.image.onload = () => {
-            this.width = this.image.width / this.frameRate;
-            this.height = this.image.height;
+            this.width = (this.image.width / this.frameRate) * this.scale;
+            this.height = this.image.height * this.scale;
         }
+        // Slow down the movement.
         this.frameRate = frameRate;
         this.currentFrame = 0;
         this.frameBuffer = frameBuffer;
         this.elapsedFrame = 0;
+        // Shrink the character.
+        this.scale = scale;
     }
     // Introduce a way to draw image on the canvas.
     draw() {

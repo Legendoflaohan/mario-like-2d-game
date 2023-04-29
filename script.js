@@ -81,7 +81,7 @@ const keys = {
 // It's called a new instance.
 const player = new Player({
     anchorPoint: {
-        x: 125,
+        x: 100,
         y: 0,
     },
     velocity: {
