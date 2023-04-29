@@ -43,12 +43,10 @@ class Sprite {
             this.width,
             this.height,
         )
-        // Why this in draw works but won't work when isolated?
-        // Why this.framRate is 1 in updateFrames and 8 in here?
-        this.updateFrames();
     }
 
     updateFrames() {
+        console.log(this.frameRate)
         if (this.currentFrame < this.frameRate - 1) {
             this.currentFrame++;
         } else {
@@ -58,6 +56,5 @@ class Sprite {
 
     execute() {
         this.draw();
-        // this.updateFrames();
     }
 }

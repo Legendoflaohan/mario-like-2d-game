@@ -75,6 +75,7 @@ class Player extends Sprite {
         c.fillStyle = 'rgba(0, 255, 0, 0.2)';
         c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
         this.draw();
+        this.updateFrames();
         // Make jump before gravity set this.anchorPoint.y to fix number.
         this.move();
         this.checkForHorizontalCollisions();
