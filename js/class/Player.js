@@ -4,10 +4,12 @@ class Player extends Sprite {
     velocity,
     acc,
     collisionBlocks,
+    platformCollisionBlocks,
     imageSrc,
     frameRate,
     frameBuffer,
     scale = 0.5,
+    animations,
   }) {
     super({
       imageSrc,
@@ -21,7 +23,26 @@ class Player extends Sprite {
     // set initial speed and acc.
     this.velocity = velocity;
     this.acc = acc;
+
     this.collisionBlocks = collisionBlocks;
+    this.platformCollisionBlocks = platformCollisionBlocks;
+    this.animations = animations;
+
+    this.lastDirection = "right";
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const key in this.animations) {
+      const image = new Image();
+      image.src = this.animations[key].imageSrc;
+      this.animations[key].image = image;
+    }
+  }
+
+  switchSprite(key) {
+    if (this.image === this.animations[key].image || !this.loaded) return;
+    this.currentFrame = 0;
+    this.image = this.animations[key].image;
+    this.frameBuffer = this.animations[key].frameBuffer;
+    this.frameRate = this.animations[key].frameRate;
   }
 
   updateHitbox() {
@@ -36,8 +57,10 @@ class Player extends Sprite {
   }
 
   gravity() {
-    this.anchorPoint.y += this.velocity.v;
+    // If these two line switch place, then the character will jitter.
+    // Chris didn't explain deeply, hold this for now.
     this.velocity.v += this.acc;
+    this.anchorPoint.y += this.velocity.v;
   }
 
   move() {
@@ -45,10 +68,33 @@ class Player extends Sprite {
     // Without this line, the player won't stop after pressing the direction keys.
     this.velocity.h = 0;
     if (keys.ArrowRight.pressed) {
-      this.velocity.h = 5;
+      player.switchSprite("Run");
+      this.velocity.h = 3;
+      this.lastDirection = "right";
+    } else if (keys.ArrowLeft.pressed) {
+      player.switchSprite("RunLeft");
+      this.velocity.h = -3;
+      this.lastDirection = "left";
+    } else if (player.velocity.v === 0) {
+      if (this.lastDirection === "right") {
+        player.switchSprite("Idle");
+      } else if (this.lastDirection === "left") {
+        player.switchSprite("IdleLeft");
+      }
     }
-    if (keys.ArrowLeft.pressed) {
-      this.velocity.h = -5;
+
+    if (player.velocity.v < 0) {
+      if (this.lastDirection === "right") {
+        player.switchSprite("Jump");
+      } else if (this.lastDirection === "left") {
+        player.switchSprite("JumpLeft");
+      }
+    } else if (player.velocity.v > 0) {
+      if (this.lastDirection === "right") {
+        player.switchSprite("Fall");
+      } else if (this.lastDirection === "left") {
+        player.switchSprite("FallLeft");
+      }
     }
   }
 
@@ -118,15 +164,15 @@ class Player extends Sprite {
   execute() {
     this.updateHitbox();
     this.updateFrames();
-    c.fillStyle = "rgba(0, 255, 0, 0.2)";
-    c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
-    c.fillStyle = "rgba(0, 0, 255, 0.5)";
-    c.fillRect(
-      this.hitbox.anchorPoint.x,
-      this.hitbox.anchorPoint.y,
-      this.hitbox.width,
-      this.hitbox.height
-    );
+    // c.fillStyle = "rgba(0, 255, 0, 0.2)";
+    // c.fillRect(this.anchorPoint.x, this.anchorPoint.y, this.width, this.height);
+    // c.fillStyle = "rgba(0, 0, 255, 0.5)";
+    // c.fillRect(
+    //   this.hitbox.anchorPoint.x,
+    //   this.hitbox.anchorPoint.y,
+    //   this.hitbox.width,
+    //   this.hitbox.height
+    // );
     this.draw();
     // Make jump before gravity set this.anchorPoint.y to fix number.
     this.move();

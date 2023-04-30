@@ -19,7 +19,6 @@ const scaledCanvas = {
   width: canvas.width / 4,
   height: canvas.height / 4,
 };
-
 // This section is about drawing collision blocks on the background.
 // This contains the floor blocks with the locations.
 const collisionBlocks = [];
@@ -82,17 +81,60 @@ const keys = {
 const player = new Player({
   anchorPoint: {
     x: 100,
-    y: 0,
+    y: 300,
   },
   velocity: {
     h: 0,
     v: 0,
   },
-  acc: 2,
+  acc: 0.2,
   collisionBlocks, // It's a short version for collisionBlocks: collisionBlocks.
+  platformCollisionBlocks, // Same as the above one.
   imageSrc: "./img/player-avatar/Idle.png",
   frameRate: 8,
   frameBuffer: 3,
+  animations: {
+    Idle: {
+      imageSrc: "./img/player-avatar/Idle.png",
+      frameRate: 8,
+      frameBuffer: 3,
+    },
+    IdleLeft: {
+      imageSrc: "./img/player-avatar/IdleLeft.png",
+      frameRate: 8,
+      frameBuffer: 3,
+    },
+    Run: {
+      imageSrc: "./img/player-avatar/Run.png",
+      frameRate: 8,
+      frameBuffer: 5,
+    },
+    RunLeft: {
+      imageSrc: "./img/player-avatar/RunLeft.png",
+      frameRate: 8,
+      frameBuffer: 5,
+    },
+    Jump: {
+      imageSrc: "./img/player-avatar/Jump.png",
+      frameRate: 2,
+      frameBuffer: 3,
+    },
+    JumpLeft: {
+      imageSrc: "./img/player-avatar/JumpLeft.png",
+      frameRate: 2,
+      frameBuffer: 3,
+    },
+    Fall: {
+      imageSrc: "./img/player-avatar/Fall.png",
+      frameRate: 2,
+      frameBuffer: 3,
+    },
+    FallLeft: {
+      imageSrc: "./img/player-avatar/FallLeft.png",
+      frameRate: 2,
+      frameBuffer: 3,
+    },
+  },
 });
 
 // Introduce the background.
@@ -145,7 +187,7 @@ window.addEventListener("keydown", (e) => {
       keys.ArrowLeft.pressed = true;
       break;
     case "ArrowUp":
-      player.velocity.v = -15;
+      player.velocity.v = -5;
       break;
     default:
   }

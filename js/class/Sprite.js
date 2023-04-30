@@ -15,10 +15,13 @@ class Sprite {
     this.image = new Image();
     // Set the image src.
     this.image.src = imageSrc;
+    // Solve sometimes character won't show up after F5 fresh.
+    this.loaded = false;
     // Get the original size of the image.
     this.image.onload = () => {
       this.width = (this.image.width / this.frameRate) * this.scale;
       this.height = this.image.height * this.scale;
+      this.loaded = true;
     };
     // Slow down the movement.
     this.frameRate = frameRate;
