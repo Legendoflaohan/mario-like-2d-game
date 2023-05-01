@@ -45,6 +45,29 @@ class Player extends Sprite {
     this.frameRate = this.animations[key].frameRate;
   }
 
+  updateCamerabox() {
+    this.camerabox = {
+      anchorPoint: {
+        x: this.anchorPoint.x - 55,
+        y: this.anchorPoint.y,
+      },
+      width: 200,
+      height: 80,
+    };
+  }
+
+  shouldPanCameraToTheLeft({ camera, canvas }) {
+    const cameraboxRightSide =
+      this.camerabox.anchorPoint.x + this.camerabox.width;
+    const scaleDownCanvasWidth = canvas.width / 4;
+    if (
+      cameraboxRightSide >=
+      scaleDownCanvasWidth + Math.abs(camera.anchorPoint.x)
+    ) {
+      camera.anchorPoint.x -= this.velocity.h;
+    }
+  }
+
   updateHitbox() {
     this.hitbox = {
       anchorPoint: {
@@ -71,6 +94,7 @@ class Player extends Sprite {
       player.switchSprite("Run");
       this.velocity.h = 2;
       this.lastDirection = "right";
+      player.shouldPanCameraToTheLeft({ camera, canvas });
     } else if (keys.ArrowLeft.pressed) {
       player.switchSprite("RunLeft");
       this.velocity.h = -2;
@@ -197,8 +221,16 @@ class Player extends Sprite {
     //   this.hitbox.anchorPoint.x,
     //   this.hitbox.anchorPoint.y,
     //   this.hitbox.width,
-    //   this.hitbox.height
+    //   this.hitbox.height,
     // );
+    this.updateCamerabox();
+    c.fillStyle = "rgba(0, 0, 255, 0.2)";
+    c.fillRect(
+      this.camerabox.anchorPoint.x,
+      this.camerabox.anchorPoint.y,
+      this.camerabox.width,
+      this.camerabox.height
+    );
     this.draw();
     // Make jump before gravity set this.anchorPoint.y to fix number.
     this.move();

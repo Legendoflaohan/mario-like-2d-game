@@ -138,6 +138,13 @@ const player = new Player({
   },
 });
 
+const camera = {
+  anchorPoint: {
+    x: 0,
+    y: 0,
+  },
+};
+
 // Introduce the background.
 const background = new Sprite({
   anchorPoint: {
@@ -162,8 +169,10 @@ function animation() {
   // // when the origin aka the coordinate changed, the position of stuff drawed after the change will change,
   // // stuff before the coordinate change will rimain its position.
   // // The canvas aka the viewport won't change place.
-  c.translate(0, -background.image.height);
-  c.translate(0, scaledCanvas.height);
+  c.translate(
+    camera.anchorPoint.x,
+    -background.image.height + scaledCanvas.height
+  );
   background.execute();
   // Draw collisions.
   collisionBlocks.forEach((collisionBlock) => {
