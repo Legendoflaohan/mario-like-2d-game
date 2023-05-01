@@ -96,6 +96,13 @@ class Player extends Sprite {
     }
   }
 
+  shouldPanCameraDown({ camera, canvas }) {
+    if (this.camerabox.anchorPoint.y + this.velocity.v <= 0) return;
+    if (this.camerabox.anchorPoint.y <= Math.abs(camera.anchorPoint.y)) {
+      camera.anchorPoint.y -= this.velocity.v;
+    }
+  }
+
   updateHitbox() {
     this.hitbox = {
       anchorPoint: {

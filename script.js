@@ -138,10 +138,11 @@ const player = new Player({
   },
 });
 
+const backgroundImageHeight = 432;
 const camera = {
   anchorPoint: {
     x: 0,
-    y: 0,
+    y: -backgroundImageHeight + scaledCanvas.height,
   },
 };
 
@@ -169,10 +170,7 @@ function animation() {
   // // when the origin aka the coordinate changed, the position of stuff drawed after the change will change,
   // // stuff before the coordinate change will rimain its position.
   // // The canvas aka the viewport won't change place.
-  c.translate(
-    camera.anchorPoint.x,
-    -background.image.height + scaledCanvas.height
-  );
+  c.translate(camera.anchorPoint.x, camera.anchorPoint.y);
   background.execute();
   // Draw collisions.
   collisionBlocks.forEach((collisionBlock) => {
@@ -205,6 +203,7 @@ function animation() {
   }
 
   if (player.velocity.v < 0) {
+    player.shouldPanCameraDown({ canvas, camera });
     if (player.lastDirection === "right") {
       player.switchSprite("Jump");
     } else if (player.lastDirection === "left") {
