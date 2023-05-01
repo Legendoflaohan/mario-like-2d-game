@@ -182,6 +182,40 @@ function animation() {
     platfromcollisionBlock.execute();
   });
   player.execute();
+
+  player.velocity.h = 0;
+  if (keys.ArrowRight.pressed) {
+    player.switchSprite("Run");
+    player.velocity.h = 2;
+    player.lastDirection = "right";
+    player.shouldPanCameraToTheLeft({ camera, canvas });
+  } else if (keys.ArrowLeft.pressed) {
+    player.switchSprite("RunLeft");
+    player.velocity.h = -2;
+    player.lastDirection = "left";
+    player.shouldPanCameraToTheRight({ camera, canvas });
+  } else if (player.velocity.v === 0) {
+    if (player.lastDirection === "right") {
+      player.switchSprite("Idle");
+    } else if (player.lastDirection === "left") {
+      player.switchSprite("IdleLeft");
+    }
+  }
+
+  if (player.velocity.v < 0) {
+    if (player.lastDirection === "right") {
+      player.switchSprite("Jump");
+    } else if (player.lastDirection === "left") {
+      player.switchSprite("JumpLeft");
+    }
+  } else if (player.velocity.v > 0) {
+    if (player.lastDirection === "right") {
+      player.switchSprite("Fall");
+    } else if (player.lastDirection === "left") {
+      player.switchSprite("FallLeft");
+    }
+  }
+
   c.restore();
   window.requestAnimationFrame(animation);
 }
@@ -198,7 +232,7 @@ window.addEventListener("keydown", (e) => {
       break;
     case "ArrowUp":
       if (player.velocity.v === 0) {
-        player.velocity.v = -3.5;
+        player.velocity.v = -3.8;
       }
       break;
     default:

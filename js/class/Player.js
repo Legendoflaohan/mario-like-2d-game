@@ -59,11 +59,20 @@ class Player extends Sprite {
   shouldPanCameraToTheLeft({ camera, canvas }) {
     const cameraboxRightSide =
       this.camerabox.anchorPoint.x + this.camerabox.width;
+    // 576 is background width.
+    if (cameraboxRightSide >= 576) return;
     const scaleDownCanvasWidth = canvas.width / 4;
     if (
       cameraboxRightSide >=
       scaleDownCanvasWidth + Math.abs(camera.anchorPoint.x)
     ) {
+      camera.anchorPoint.x -= this.velocity.h;
+    }
+  }
+
+  shouldPanCameraToTheRight({ camera, canvas }) {
+    if (this.camerabox.anchorPoint.x <= 0) return;
+    if (this.camerabox.anchorPoint.x <= Math.abs(camera.anchorPoint.x)) {
       camera.anchorPoint.x -= this.velocity.h;
     }
   }
@@ -89,37 +98,6 @@ class Player extends Sprite {
   move() {
     this.anchorPoint.x += this.velocity.h;
     // Without this line, the player won't stop after pressing the direction keys.
-    this.velocity.h = 0;
-    if (keys.ArrowRight.pressed) {
-      player.switchSprite("Run");
-      this.velocity.h = 2;
-      this.lastDirection = "right";
-      player.shouldPanCameraToTheLeft({ camera, canvas });
-    } else if (keys.ArrowLeft.pressed) {
-      player.switchSprite("RunLeft");
-      this.velocity.h = -2;
-      this.lastDirection = "left";
-    } else if (player.velocity.v === 0) {
-      if (this.lastDirection === "right") {
-        player.switchSprite("Idle");
-      } else if (this.lastDirection === "left") {
-        player.switchSprite("IdleLeft");
-      }
-    }
-
-    if (player.velocity.v < 0) {
-      if (this.lastDirection === "right") {
-        player.switchSprite("Jump");
-      } else if (this.lastDirection === "left") {
-        player.switchSprite("JumpLeft");
-      }
-    } else if (player.velocity.v > 0) {
-      if (this.lastDirection === "right") {
-        player.switchSprite("Fall");
-      } else if (this.lastDirection === "left") {
-        player.switchSprite("FallLeft");
-      }
-    }
   }
 
   checkForHorizontalCollisions() {
