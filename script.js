@@ -173,12 +173,12 @@ function animation() {
   c.translate(camera.anchorPoint.x, camera.anchorPoint.y);
   background.execute();
   // Draw collisions.
-  collisionBlocks.forEach((collisionBlock) => {
-    collisionBlock.execute();
-  });
-  platformCollisionBlocks.forEach((platfromcollisionBlock) => {
-    platfromcollisionBlock.execute();
-  });
+  // collisionBlocks.forEach((collisionBlock) => {
+  //   collisionBlock.execute();
+  // });
+  // platformCollisionBlocks.forEach((platfromcollisionBlock) => {
+  //   platfromcollisionBlock.execute();
+  // });
 
   player.checkForHorizontalCanvasCollision();
   player.execute();

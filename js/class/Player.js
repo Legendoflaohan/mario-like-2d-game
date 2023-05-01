@@ -243,13 +243,13 @@ class Player extends Sprite {
     //   this.hitbox.height,
     // );
     this.updateCamerabox();
-    c.fillStyle = "rgba(0, 0, 255, 0.2)";
-    c.fillRect(
-      this.camerabox.anchorPoint.x,
-      this.camerabox.anchorPoint.y,
-      this.camerabox.width,
-      this.camerabox.height
-    );
+    // c.fillStyle = "rgba(0, 0, 255, 0.2)";
+    // c.fillRect(
+    //   this.camerabox.anchorPoint.x,
+    //   this.camerabox.anchorPoint.y,
+    //   this.camerabox.width,
+    //   this.camerabox.height
+    // );
     this.draw();
     // Make jump before gravity set this.anchorPoint.y to fix number.
     this.move();
