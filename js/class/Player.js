@@ -69,11 +69,11 @@ class Player extends Sprite {
     this.velocity.h = 0;
     if (keys.ArrowRight.pressed) {
       player.switchSprite("Run");
-      this.velocity.h = 3;
+      this.velocity.h = 2;
       this.lastDirection = "right";
     } else if (keys.ArrowLeft.pressed) {
       player.switchSprite("RunLeft");
-      this.velocity.h = -3;
+      this.velocity.h = -2;
       this.lastDirection = "left";
     } else if (player.velocity.v === 0) {
       if (this.lastDirection === "right") {
@@ -153,7 +153,33 @@ class Player extends Sprite {
 
           const offset = this.hitbox.anschorPoint.y - this.anchorPoint.y;
 
-          this.anchorPoint.y = collisionBlock.height - offset + 0.01;
+          this.anchorPoint.y =
+            collisionBlock.anchorPoint.y +
+            collisionBlock.height -
+            offset +
+            0.01;
+          break;
+        }
+      }
+    }
+
+    // For platform collision blocks.
+    for (let i = 0; i < this.platformCollisionBlocks.length; i++) {
+      const platformCollisionBlock = this.platformCollisionBlocks[i];
+      if (
+        platformCollision({
+          object1: this.hitbox,
+          object2: platformCollisionBlock,
+        })
+      ) {
+        if (this.velocity.v > 0) {
+          this.velocity.v = 0;
+
+          const offset =
+            this.hitbox.anchorPoint.y - this.anchorPoint.y + this.hitbox.height;
+
+          this.anchorPoint.y =
+            platformCollisionBlock.anchorPoint.y - offset - 0.01;
           break;
         }
       }

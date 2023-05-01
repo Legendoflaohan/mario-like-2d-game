@@ -44,7 +44,7 @@ floorCollision2D.forEach((row, y) => {
   });
 });
 // This contains the platform blocks with locations.
-const platformCollsionBlocks = [];
+const platformCollisionBlocks = [];
 // This contains the platform tiles' arrays.
 const platformCollision2D = [];
 for (let i = 0; i < platformCollisions.length; i += 36) {
@@ -54,12 +54,13 @@ for (let i = 0; i < platformCollisions.length; i += 36) {
 platformCollision2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 202) {
-      platformCollsionBlocks.push(
+      platformCollisionBlocks.push(
         new CollisionBlock({
           anchorPoint: {
             x: x * 16,
             y: y * 16,
           },
+          height: 4,
         })
       );
     }
@@ -87,9 +88,9 @@ const player = new Player({
     h: 0,
     v: 0,
   },
-  acc: 0.2,
+  acc: 0.1,
   collisionBlocks, // It's a short version for collisionBlocks: collisionBlocks.
-  platformCollisionBlocks, // Same as the above one.
+  platformCollisionBlocks, // Same as the above.
   imageSrc: "./img/player-avatar/Idle.png",
   frameRate: 8,
   frameBuffer: 3,
@@ -168,7 +169,7 @@ function animation() {
   collisionBlocks.forEach((collisionBlock) => {
     collisionBlock.execute();
   });
-  platformCollsionBlocks.forEach((platfromcollisionBlock) => {
+  platformCollisionBlocks.forEach((platfromcollisionBlock) => {
     platfromcollisionBlock.execute();
   });
   player.execute();
@@ -187,7 +188,7 @@ window.addEventListener("keydown", (e) => {
       keys.ArrowLeft.pressed = true;
       break;
     case "ArrowUp":
-      player.velocity.v = -5;
+      player.velocity.v = -3.5;
       break;
     default:
   }
