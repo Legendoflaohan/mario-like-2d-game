@@ -68,8 +68,8 @@ class Player extends Sprite {
   // Prevent character fall off from the right edge.
   checkForHorizontalCanvasCollision() {
     if (
-      this.hitbox.anchorPoint.x + this.hitbox.width + this.velocity.h >=
-      576
+      this.hitbox.anchorPoint.x + this.hitbox.width + this.velocity.h >= 576 ||
+      this.hitbox.anchorPoint.x + this.velocity.h <= 0
     ) {
       this.velocity.h = 0;
     }
