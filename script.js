@@ -210,6 +210,7 @@ function animation() {
       player.switchSprite("JumpLeft");
     }
   } else if (player.velocity.v > 0) {
+    player.shouldPanCameraUp({ canvas, camera });
     if (player.lastDirection === "right") {
       player.switchSprite("Fall");
     } else if (player.lastDirection === "left") {

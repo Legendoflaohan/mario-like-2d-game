@@ -103,6 +103,21 @@ class Player extends Sprite {
     }
   }
 
+  shouldPanCameraUp({ camera, canvas }) {
+    if (
+      this.camerabox.anchorPoint.y + this.camerabox.height + this.velocity.v >=
+      432
+    )
+      return;
+    const scaledCanvasHeight = canvas.height / 4;
+    if (
+      this.camerabox.anchorPoint.y + this.camerabox.height >=
+      Math.abs(camera.anchorPoint.y) + scaledCanvasHeight
+    ) {
+      camera.anchorPoint.y -= this.velocity.v;
+    }
+  }
+
   updateHitbox() {
     this.hitbox = {
       anchorPoint: {
