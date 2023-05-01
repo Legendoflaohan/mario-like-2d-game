@@ -35,6 +35,15 @@ class Player extends Sprite {
       image.src = this.animations[key].imageSrc;
       this.animations[key].image = image;
     }
+
+    this.hitbox = {
+      anchorPoint: {
+        x: this.anchorPoint.x + 33,
+        y: this.anchorPoint.y + 25,
+      },
+      width: 15,
+      height: 28,
+    };
   }
 
   switchSprite(key) {
@@ -54,6 +63,16 @@ class Player extends Sprite {
       width: 200,
       height: 80,
     };
+  }
+
+  // Prevent character fall off from the right edge.
+  checkForHorizontalCanvasCollision() {
+    if (
+      this.hitbox.anchorPoint.x + this.hitbox.width + this.velocity.h >=
+      576
+    ) {
+      this.velocity.h = 0;
+    }
   }
 
   shouldPanCameraToTheLeft({ camera, canvas }) {

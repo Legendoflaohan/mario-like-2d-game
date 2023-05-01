@@ -181,6 +181,8 @@ function animation() {
   platformCollisionBlocks.forEach((platfromcollisionBlock) => {
     platfromcollisionBlock.execute();
   });
+
+  player.checkForHorizontalCanvasCollision();
   player.execute();
 
   player.velocity.h = 0;
